@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>Piva Snake Game</title>
+</head>
+
+<body>
+    <canvas id="stage" width="400" height="400"></canvas>    
+    <script type="text/javascript">
+        window.onload = function() {
+
+            var stage = document.getElementById("stage");
+            var ctx = stage.getContext("2d");
+            document.addEventListener("keydown", keypush)
+            setInterval(game, 80)
+
+            const speed = 1
+            var speedx = speedy = 0
+            var positionx = 10
+            var positiony = 15
+            var sizepiece = 20
+            var amountpieces = 20
+            var applex = appley = 15
+
+            var trail = [] // rastro da cobra
+            tail = 5 // cauda
+
+            function game() {
+                positionx += speedx;
+                positiony += speedy;
+                if (positionx < 0) {
+                    positionx = amountpieces - 1;
+                }
+                if (positionx > amountpieces - 1) {
+                    positionx = 0;
+                }
+                if (positiony < 0) {
+                    positiony = amountpieces -1;
+                }
+                if (positiony > amountpieces - 1) {
+                    positiony = 0;    
+                }
+
+                ctx.fillStyle = "black"
+                ctx.fillRect(0,0, stage.width, stage.height);
+                
+                ctx.fillStyle = "red"
+                ctx.fillRect(applex*sizepiece, appley*sizepiece, sizepiece, sizepiece)
+                
+                ctx.fillStyle = "gray"
+                for (let i = 0; i < trail.length; i++) {
+                    ctx.fillRect(trail[i].x*sizepiece, trail[i].y*sizepiece, sizepiece-1, sizepiece-1)
+                    if (trail[i].x == positionx && trail[i].y == positiony) {
+                        speedx = speedy = 0;
+                        tail = 5
+                    }
+                }
+
+                trail.push({x:positionx, y:positiony})
+                while (trail.length > tail) {
+                    trail.shift();
+                }
+
+                if (applex == positionx && appley == positiony) {
+                    tail++;
+                    applex = Math.floor(Math.random()*amountpieces);                  
+                    appley = Math.floor(Math.random()*amountpieces);
+                }
+
+
+            }
+
+            function keypush(event) {
+                
+                switch (event.keyCode) {
+                    case 37: // left
+                        speedx = -speed;
+                        speedy = 0;
+                        break;
+                    case 38: // up
+                        speedx = 0;
+                        speedy = -speed;
+                        break;
+                    case 39: // right
+                        speedx = speed;
+                        speedy = 0 ;
+                        break;
+                    case 40: // down
+                        speedx = 0;
+                        speedy = speed;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            
+
+
+
+        }
+
+    </script>
+</body>
+</html>
