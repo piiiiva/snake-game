@@ -5,28 +5,28 @@
 </head>
 
 <body>
-    <canvas id="stage" width="400" height="400"></canvas>    
+    <canvas id="stage" width="400" height="400"></canvas> 
     <script type="text/javascript">
         window.onload = function() {
 
-            var stage = document.getElementById("stage");
-            var ctx = stage.getContext("2d");
-            document.addEventListener("keydown", keypush)
-            setInterval(game, 80)
+            let stage = document.getElementById("stage");
+            let ctx = stage.getContext("2d");
+            document.addEventListener("keydown", keypush) // adiciona um evento de espera em que cada vez que uma tecla foir precionada aticva a function keypush
+            setInterval(game, 100)
 
-            const speed = 1
-            var speedx = speedy = 0
-            var positionx = 10
-            var positiony = 15
-            var sizepiece = 20
-            var amountpieces = 20
-            var applex = appley = 15
+            const speed = 1 // é a velocidade de casas que anda, uma casa
+            let speedx = speedy = 0 // zero pq só altera quando eu precisar uma key de movimentaçao
+            let positionx = 10 // poisiçao no eixo x posiçao da cabeça ca cobra
+            let positiony = 10 // posiçao no eixo y posiçao da cabeça da cobra
+            let sizepiece = 20 // o tamanho de cada quadradinho do tabuleiro 
+            let amountpieces = stage.width/sizepiece
+            let applex = appley = 15
 
-            var trail = [] // rastro da cobra
-            tail = 5 // cauda
+            let trail = [] // rastro da cobra
+            tail = 3 // cauda
 
             function game() {
-                positionx += speedx;
+                positionx += speedx; // x = x+y
                 positiony += speedy;
                 if (positionx < 0) {
                     positionx = amountpieces - 1;
@@ -50,9 +50,9 @@
                 ctx.fillStyle = "gray"
                 for (let i = 0; i < trail.length; i++) {
                     ctx.fillRect(trail[i].x*sizepiece, trail[i].y*sizepiece, sizepiece-1, sizepiece-1)
-                    if (trail[i].x == positionx && trail[i].y == positiony) {
-                        speedx = speedy = 0;
-                        tail = 5
+                    if (trail[i].x == positionx && trail[i].y == positiony) { // game over
+                        speedx = speedy = 0; 
+                        tail = 3          
                     }
                 }
 
@@ -73,31 +73,37 @@
             function keypush(event) {
                 
                 switch (event.keyCode) {
-                    case 37: // left
-                        speedx = -speed;
-                        speedy = 0;
+/* minha speed é 1 e quer dizer uma casa, avança uma casa entao se eu quero ir pra esquerda e isso é
+no eixo x que conta da esquerda pra direita, -speed quer dizer vai pro lado oposto de direita, pra esquerda no caso
+só seguir essa lógica pra todos*/
+                    case 37: // arrowleft
+                        if (speedx != speed) { // pra ir pra esquerda nao pode estar vindo da esquerda
+                            speedx = -speed; // rever o nome das variaveis speedx e speed y, elas sao velocidade mas só recebem speed depois de uma tecla de direçao ser apertada, entao poderia ser movimento a variavel
+                            speedy = 0;
+                        }                        
                         break;
-                    case 38: // up
-                        speedx = 0;
-                        speedy = -speed;
+                    case 38: // arrowup
+                        if (speedy != speed) {
+                            speedx = 0;
+                            speedy = -speed;    
+                        }                        
                         break;
-                    case 39: // right
-                        speedx = speed;
-                        speedy = 0 ;
+                    case 39: // arrowright
+                        if (speedx != -speed) {
+                            speedx = speed;
+                            speedy = 0 ; 
+                    }                        
                         break;
-                    case 40: // down
-                        speedx = 0;
-                        speedy = speed;
+                    case 40: // arrowdown
+                        if (speedy != -speed) {
+                            speedx = 0;
+                            speedy = speed;
+                    }                        
                         break;
                     default:
                         break;
                 }
             }
-
-            
-
-
-
         }
 
     </script>
